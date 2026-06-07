@@ -1,68 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QUEST - Login</title>
 <link rel="stylesheet" href="style.css">
-</head>
+</head><body><div class="auth-page page"><div class="hero-logo">Q</div>
+<h1 class="hero-title">QUEST</h1>
+<p class="hero-tagline">Welcome Back • Continue Your Journey</p>
 
-<body>
+<div class="auth-card">
 
-<!-- AUTH PAGE -->
-<div class="auth-page page">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
 
-    <!-- HERO BRAND -->
-    <div class="hero-logo">Q</div>
-    <h1 class="hero-title">QUEST</h1>
-    <p class="hero-tagline">Welcome Back • Continue Your Journey</p>
+    <button class="primary-btn" onclick="login()">
+        Login
+    </button>
 
-    <!-- LOGIN CARD -->
-    <div class="auth-card">
-
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-
-        <button class="primary-btn" onclick="login()">Login</button>
-
-        <button class="secondary-btn" onclick="goSignup()">Create Account</button>
-
-    </div>
+    <button class="secondary-btn" onclick="goSignup()">
+        Create Account
+    </button>
 
 </div>
 
-<script>
-/* =========================
-   LOGIN SYSTEM (V3)
-========================= */
+</div><script type="module">
 
-function login(){
+import { auth } from "./firebase-config.js";
 
-    let email = document.getElementById("email").value;
+import {
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    if(email.trim() === ""){
-        alert("Please enter your email");
+window.login = async function() {
+
+    const email =
+        document.getElementById("email").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("Please fill all fields");
         return;
     }
 
-    // simulate login success
-    localStorage.setItem("loggedIn", "true");
+    try {
 
-    // optional: store email
-    localStorage.setItem("email", email);
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-    // redirect to dashboard
-    window.location.href = "dashboard.html";
-}
+        alert("Login successful");
 
-/* =========================
-   NAVIGATION
-========================= */
+        window.location.href =
+            "dashboard.html";
 
-function goSignup(){
-    window.location.href = "signup.html";
-}
-</script>
+    } catch (error) {
 
-</body>
+        alert(error.message);
+
+    }
+
+};
+
+window.goSignup = function() {
+
+    window.location.href =
+        "signup.html";
+
+};
+
+</script></body>
 </html>
