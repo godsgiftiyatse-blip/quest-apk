@@ -1,35 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - QUEST</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
+  <title>Login - QUEST</title>  <link rel="stylesheet" href="css/style.css">
+</head><body><div class="container">  <div style="margin-top:60px"><h1 style="font-size:36px;">
+  Welcome Back 👋
+</h1>
 
-<body>
+<p style="color:#94A3B8;margin-top:10px;">
+  Continue your journey
+</p>
 
-<div class="container">
+<div style="margin-top:40px;">
 
-  <div class="auth-card">
+  <input
+    type="email"
+    id="email"
+    placeholder="Email"
+  >
 
-    <h1 class="auth-title">Welcome Back 👋</h1>
+  <input
+    type="password"
+    id="password"
+    placeholder="Password"
+  >
 
-    <p class="auth-subtitle">Continue your journey</p>
+  <button
+    class="btn-primary"
+    onclick="login()"
+  >
+    Login
+  </button>
 
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
+  <button
+    class="btn-secondary"
+    onclick="googleLogin()"
+    style="margin-top:12px;"
+  >
+    Continue with Google
+  </button>
 
-    <button class="btn-primary">Login</button>
+  <p style="text-align:center;margin-top:20px;">
+    Don't have an account?
 
-    <p class="auth-footer">
-      Don't have an account?
-      <a class="auth-link" href="signup.html">Sign Up</a>
-    </p>
-
-  </div>
+    <a
+      href="signup.html"
+      style="color:#29F19C;"
+    >
+      Sign Up
+    </a>
+  </p>
 
 </div>
 
-</body>
+  </div></div><script type="module" src="js/auth.js"></script></body>
 </html>
