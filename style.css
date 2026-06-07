@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    padding-bottom: 70px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #111827;
+}
+
+/* PROFILE */
+.profile {
+    margin: 10px 15px;
+    padding: 10px;
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+.profile input {
+    width: 70%;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 5px;
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+}
+
+/* SECTION */
+.section-title {
+    margin-left: 15px;
+}
+
+/* TASKS */
+.task {
+    background: #1e293b;
+    margin: 10px 15px;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* BUTTON */
+button {
+    background: #22c55e;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* BADGES */
+.badges {
+    margin: 10px 15px;
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #111827;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+/* DARK MODE */
+.dark {
+    background: #0b0f19;
+}
+
+.dark .task,
+.dark .card,
+.dark .header,
+.dark .bottom-nav,
+.dark .profile,
+.dark .badges {
+    background: #0b1220;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QUEST App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>QUEST</h1>
+        <button onclick="toggleMode()">🌙</button>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile">
+        <h3 id="username">Student</h3>
+        <input id="nameInput" placeholder="Enter your name">
+        <button onclick="saveName()">Save</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="card">
+            <h3>Level</h3>
+            <p id="level">1</p>
+        </div>
+
+        <div class="card">
+            <h3>XP</h3>
+            <p id="xp">0</p>
+        </div>
+
+        <div class="card">
+            <h3>🔥 Streak</h3>
+            <p id="streak">0</p>
+        </div>
+    </div>
+
+    <!-- AI QUESTS -->
+    <h2 class="section-title">🧠 AI Quests</h2>
+
+    <div id="questContainer"></div>
+
+    <button onclick="generateQuests()">🔄 Generate New Quests</button>
+
+    <!-- BADGES -->
+    <h2 class="section-title">🏅 Achievements</h2>
+
+    <div class="badges">
+        <p id="badge1">🔒 Beginner</p>
+        <p id="badge2">🔒 Focused Student</p>
+        <p id="badge3">🔒 Elite Learner</p>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div>🏠 Home</div>
+        <div>🎯 Quests</div>
+        <div>🏆 Achievements</div>
+        <div>👤 Profile</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
