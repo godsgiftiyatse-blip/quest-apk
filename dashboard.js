@@ -1,63 +1,66 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-// 🔥 Your Firebase config (replace with yours)
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-};
+let userRef;
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// 📊 Load user data
+// 🔐 CHECK USER LOGIN
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
-
-    if (snap.exists()) {
-      const data = snap.data();
-
-      document.getElementById("name").textContent = data.name;
-      document.getElementById("xp").textContent = data.xp;
-      document.getElementById("level").textContent = data.level;
-    }
-  } else {
+  if (!user) {
     window.location.href = "login.html";
+    return;
+  }
+
+  userRef = doc(db, "users", user.uid);
+
+  const snap = await getDoc(userRef);
+
+  if (snap.exists()) {
+    const data = snap.data();
+
+    document.getElementById("level").textContent = "Level " + data.level;
+    document.getElementById("xpText").textContent = data.xp + " XP";
+
+    updateProgress(data.xp);
   }
 });
 
-// 🎮 XP SYSTEM
-window.gainXP = async function () {
-  const user = auth.currentUser;
-  if (!user) return;
+// 🎮 COMPLETE TASK = ADD XP
+window.completeTask = async function (el) {
+  if (el.classList.contains("done")) return;
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
+  el.classList.add("done");
 
-  if (snap.exists()) {
-    let data = snap.data();
+  const snap = await getDoc(userRef);
+  let data = snap.data();
 
-    let xp = data.xp + 10;
-    let level = data.level;
+  let xp = data.xp + 20;
+  let level = data.level;
 
-    if (xp >= 100) {
-      level += 1;
-      xp = 0;
-    }
-
-    await updateDoc(ref, { xp, level });
-
-    document.getElementById("xp").textContent = xp;
-    document.getElementById("level").textContent = level;
+  // LEVEL UP SYSTEM
+  if (xp >= 100) {
+    level += 1;
+    xp = 0;
   }
+
+  await updateDoc(userRef, {
+    xp,
+    level
+  });
+
+  document.getElementById("level").textContent = "Level " + level;
+  document.getElementById("xpText").textContent = xp + " XP";
+
+  updateProgress(xp);
 };
 
-// 🚪 Logout
+// 📊 PROGRESS BAR
+function updateProgress(xp) {
+  let percent = xp;
+  document.getElementById("progressBar").style.width = percent + "%";
+}
+
+// 🚪 LOGOUT
 window.logout = async function () {
   await signOut(auth);
   window.location.href = "login.html";
