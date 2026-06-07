@@ -13,25 +13,33 @@
 
   <div class="auth-card" style="margin-top:60px">
 
-    <h1 class="auth-title">Your Quest</h1>
+    <h1 class="auth-title">Daily Quests</h1>
 
     <p class="auth-subtitle" id="userInfo">Loading...</p>
 
-    <p style="margin-top:20px;color:#29F19C;font-weight:700;" id="stats">
+    <p style="margin-top:15px;color:#29F19C;font-weight:700;" id="stats">
       XP: 0 | Level: 1
     </p>
 
     <div style="margin-top:25px;">
-      <button class="btn-primary" onclick="earnXP(10)">
-        Complete Task (+10 XP)
+
+      <h3 style="margin-bottom:10px;">Today’s Missions</h3>
+
+      <button class="btn-primary" onclick="completeQuest('login')">
+        Daily Login (+5 XP)
       </button>
 
-      <button class="btn-secondary" onclick="earnXP(25)">
-        Hard Quest (+25 XP)
+      <button class="btn-primary" style="margin-top:10px;" onclick="completeQuest('task')">
+        Complete Task (+15 XP)
       </button>
+
+      <button class="btn-secondary" style="margin-top:10px;" onclick="completeQuest('hard')">
+        Hard Quest (+30 XP)
+      </button>
+
     </div>
 
-    <button class="btn-primary" style="margin-top:15px;" onclick="logout()">
+    <button class="btn-primary" style="margin-top:20px;" onclick="logout()">
       Logout
     </button>
 
@@ -44,8 +52,9 @@
   import { getAuth, onAuthStateChanged, signOut } 
   from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  import { getFirestore, doc, getDoc, updateDoc, increment } 
-  from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { 
+    getFirestore, doc, getDoc, updateDoc, increment, setDoc 
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -58,9 +67,9 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  let currentUser = null;
-  let userRef = null;
-  let userData = null;
+  let userRef;
+  let userData;
+  let currentUser;
 
   // 🔐 AUTH + LOAD DATA
   onAuthStateChanged(auth, async (user) => {
@@ -74,39 +83,64 @@
     userRef = doc(db, "users", user.uid);
 
     const snap = await getDoc(userRef);
+    userData = snap.data();
 
-    if (snap.exists()) {
-      userData = snap.data();
+    // 🧠 DAILY RESET CHECK
+    const today = new Date().toDateString();
 
-      document.getElementById("userInfo").textContent =
-        "Welcome " + userData.name;
+    if (userData.lastLogin !== today) {
+      await updateDoc(userRef, {
+        lastLogin: today,
+        dailyTasks: {
+          login: false,
+          task: false,
+          hard: false
+        }
+      });
 
-      updateUI();
+      userData.dailyTasks = {
+        login: false,
+        task: false,
+        hard: false
+      };
     }
 
+    document.getElementById("userInfo").textContent =
+      "Welcome " + userData.name;
+
+    updateUI();
   });
 
-  // 🎮 XP ENGINE
-  window.earnXP = async function (amount) {
+  // 🎮 COMPLETE QUEST SYSTEM
+  window.completeQuest = async function (type) {
 
-    if (!currentUser) return;
-
-    const snap = await getDoc(userRef);
-    const data = snap.data();
-
-    let newXP = data.xp + amount;
-    let newLevel = data.level;
-
-    // 🏆 LEVEL SYSTEM
-    if (newXP >= newLevel * 100) {
-      newLevel += 1;
-      newXP = 0;
-      alert("Level Up! 🎉 You are now Level " + newLevel);
+    if (userData.dailyTasks[type]) {
+      alert("Already completed today!");
+      return;
     }
+
+    let reward = 0;
+
+    if (type === "login") reward = 5;
+    if (type === "task") reward = 15;
+    if (type === "hard") reward = 30;
+
+    let newXP = userData.xp + reward;
+    let newLevel = userData.level;
+
+    // 🏆 LEVEL UP LOGIC
+    if (newXP >= newLevel * 100) {
+      newLevel++;
+      newXP = 0;
+      alert("LEVEL UP! 🎉 Now Level " + newLevel);
+    }
+
+    userData.dailyTasks[type] = true;
 
     await updateDoc(userRef, {
       xp: newXP,
-      level: newLevel
+      level: newLevel,
+      dailyTasks: userData.dailyTasks
     });
 
     userData.xp = newXP;
@@ -128,4 +162,4 @@
 </script>
 
 </body>
-</html>
+        </html>
