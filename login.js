@@ -1,35 +1,56 @@
-import { auth } from "./firebase.js";
+import { auth, provider } from "./firebase.js";
 import {
-    signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  sendPasswordResetEmail,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* UI ELEMENTS */
 const form = document.getElementById("loginForm");
 const errorBox = document.getElementById("error");
 const btn = document.getElementById("loginBtn");
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    // reset UI
-    errorBox.innerText = "";
-    btn.innerText = "Logging in...";
-    btn.disabled = true;
-
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-
-        // success → redirect
-        window.location.href = "dashboard.html";
-
-    } catch (error) {
-        errorBox.innerText = error.message;
-
-    } finally {
-        btn.innerText = "Login";
-        btn.disabled = false;
-    }
+onAuthStateChanged(auth, (user) => {
+  if (user) window.location.href = "dashboard.html";
 });
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = email.value;
+  const password = password.value;
+
+  errorBox.innerText = "";
+  btn.innerText = "Loading...";
+  btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    errorBox.innerText = err.message;
+  } finally {
+    btn.innerText = "Login";
+    btn.disabled = false;
+  }
+});
+
+window.googleLogin = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    errorBox.innerText = err.message;
+  }
+};
+
+window.resetPassword = async () => {
+  const email = document.getElementById("email").value;
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    errorBox.innerText = "Reset email sent!";
+  } catch (err) {
+    errorBox.innerText = err.message;
+  }
+};
