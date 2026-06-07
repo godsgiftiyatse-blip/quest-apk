@@ -1,5 +1,5 @@
 /* =========================
-   RESET + GLOBAL
+   BASE
 ========================= */
 *{
     margin:0;
@@ -9,58 +9,60 @@
 }
 
 body{
-    background:#0a0f1c;
+    background:#070b14;
     color:white;
     min-height:100vh;
     overflow-x:hidden;
 }
 
 /* =========================
-   BACKGROUND GLOW
+   BACKGROUND SYSTEM (V2)
 ========================= */
-body::before{
-    content:"";
-    position:fixed;
-    width:450px;
-    height:450px;
-    background:#22c55e;
-    filter:blur(180px);
-    opacity:.15;
-    top:-150px;
-    right:-150px;
-    z-index:-1;
-}
-
+body::before,
 body::after{
     content:"";
     position:fixed;
-    width:400px;
-    height:400px;
-    background:#3b82f6;
-    filter:blur(200px);
-    opacity:.10;
-    bottom:-150px;
-    left:-150px;
+    border-radius:50%;
+    filter:blur(180px);
     z-index:-1;
 }
 
+body::before{
+    width:450px;
+    height:450px;
+    background:#22c55e;
+    opacity:.12;
+    top:-120px;
+    right:-120px;
+}
+
+body::after{
+    width:420px;
+    height:420px;
+    background:#3b82f6;
+    opacity:.10;
+    bottom:-140px;
+    left:-140px;
+}
+
 /* =========================
-   AUTH (LOGIN + SIGNUP)
+   AUTH (LOGIN / SIGNUP V2)
 ========================= */
-.auth-container{
+.auth-page{
     min-height:100vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    padding:20px;
+    padding:25px;
     text-align:center;
 }
 
-.logo-badge{
-    width:75px;
-    height:75px;
-    border-radius:18px;
+/* HERO BRAND */
+.hero-logo{
+    width:80px;
+    height:80px;
+    border-radius:22px;
     background:linear-gradient(135deg,#22c55e,#16a34a);
     display:flex;
     justify-content:center;
@@ -68,46 +70,47 @@ body::after{
     font-size:34px;
     font-weight:bold;
     color:black;
-    margin:0 auto 10px;
-    box-shadow:0 15px 35px rgba(34,197,94,0.25);
+    margin-bottom:15px;
+    box-shadow:0 20px 40px rgba(34,197,94,0.25);
     animation:float 3s ease-in-out infinite;
 }
 
 @keyframes float{
     0%{transform:translateY(0);}
-    50%{transform:translateY(-6px);}
+    50%{transform:translateY(-8px);}
     100%{transform:translateY(0);}
 }
 
-.logo{
-    font-size:48px;
+.hero-title{
+    font-size:46px;
     color:#22c55e;
     font-weight:900;
     letter-spacing:2px;
-    margin-top:10px;
 }
 
-.tagline{
+.hero-tagline{
     font-size:15px;
     opacity:.8;
-    margin-bottom:15px;
+    margin-top:5px;
+    margin-bottom:25px;
 }
 
+/* AUTH CARD */
 .auth-card{
     width:100%;
-    max-width:360px;
+    max-width:380px;
     background:rgba(255,255,255,0.06);
     border:1px solid rgba(255,255,255,0.12);
-    border-radius:18px;
+    border-radius:20px;
     padding:22px;
-    backdrop-filter:blur(18px);
-    box-shadow:0 25px 60px rgba(0,0,0,0.5);
+    backdrop-filter:blur(20px);
+    box-shadow:0 30px 70px rgba(0,0,0,0.6);
 }
 
 /* inputs */
 .auth-card input{
     width:100%;
-    padding:14px;
+    padding:15px;
     margin:8px 0;
     border-radius:12px;
     border:1px solid #1f2937;
@@ -120,48 +123,40 @@ body::after{
 
 .auth-card input:focus{
     border-color:#22c55e;
-    box-shadow:0 0 10px rgba(34,197,94,0.25);
+    box-shadow:0 0 12px rgba(34,197,94,0.25);
 }
 
 /* buttons */
-.auth-card button{
+.primary-btn{
     width:100%;
-    padding:14px;
+    padding:15px;
     margin-top:10px;
     border:none;
-    border-radius:12px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:black;
     font-weight:bold;
     cursor:pointer;
     transition:.3s;
 }
 
-/* primary */
-.auth-card button{
-    background:#22c55e;
-    color:black;
-}
-
-.auth-card button:hover{
+.primary-btn:hover{
     transform:scale(1.05);
-    background:#16a34a;
 }
 
 /* secondary */
 .secondary-btn{
-    background:transparent !important;
-    border:1px solid #22c55e !important;
-    color:#22c55e !important;
-}
-
-/* switch text */
-.switch{
+    width:100%;
+    padding:15px;
     margin-top:10px;
-    font-size:13px;
-    opacity:.7;
+    border-radius:14px;
+    border:1px solid #22c55e;
+    background:transparent;
+    color:#22c55e;
 }
 
 /* =========================
-   TOP BAR
+   DASHBOARD V2
 ========================= */
 .topbar{
     display:flex;
@@ -169,19 +164,10 @@ body::after{
     align-items:center;
     padding:18px 20px;
     background:rgba(255,255,255,0.03);
-    backdrop-filter:blur(14px);
+    backdrop-filter:blur(18px);
     border-bottom:1px solid rgba(255,255,255,0.08);
     position:sticky;
     top:0;
-}
-
-.user-info h3{
-    font-size:16px;
-}
-
-.user-info p{
-    font-size:12px;
-    opacity:.7;
 }
 
 .avatar{
@@ -190,16 +176,13 @@ body::after{
     border-radius:50%;
     background:linear-gradient(135deg,#22c55e,#16a34a);
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     color:black;
     font-weight:bold;
-    box-shadow:0 8px 20px rgba(34,197,94,0.25);
 }
 
-/* =========================
-   DASHBOARD
-========================= */
+/* DASHBOARD */
 .dashboard{
     padding:20px;
     display:flex;
@@ -207,35 +190,26 @@ body::after{
     gap:16px;
 }
 
-/* cards */
+/* CARD V2 */
 .card{
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.1);
-    padding:16px;
     border-radius:18px;
-    backdrop-filter:blur(14px);
-    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    padding:16px;
+    backdrop-filter:blur(16px);
+    box-shadow:0 12px 35px rgba(0,0,0,0.35);
     transition:.3s;
 }
 
 .card:hover{
-    transform:translateY(-3px);
-    border-color:rgba(34,197,94,0.3);
+    transform:translateY(-4px);
+    border-color:rgba(34,197,94,0.25);
 }
 
-/* =========================
-   XP SYSTEM
-========================= */
+/* XP */
 .level-row{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-}
-
-.xp-card h2{
-    color:#22c55e;
-    font-size:20px;
 }
 
 .progress-bar{
@@ -244,44 +218,29 @@ body::after{
     background:#111827;
     border-radius:10px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,0.05);
+    margin-top:10px;
 }
 
 .progress{
-    width:50%;
+    width:45%;
     height:100%;
     background:linear-gradient(90deg,#22c55e,#16a34a);
     box-shadow:0 0 10px rgba(34,197,94,0.4);
-    transition:.5s;
 }
 
-/* =========================
-   QUEST + TASKS
-========================= */
-.quest-title{
-    font-size:18px;
-    font-weight:bold;
-    margin:6px 0;
-}
-
-.progress-text{
-    font-size:13px;
-    opacity:.7;
-}
-
+/* TASKS */
 .task{
     display:flex;
     align-items:center;
     padding:10px;
-    margin:8px 0;
     border-radius:10px;
+    margin:8px 0;
     cursor:pointer;
     transition:.3s;
 }
 
 .task:hover{
     background:rgba(255,255,255,0.04);
-    transform:scale(1.02);
 }
 
 .task span{
@@ -289,18 +248,16 @@ body::after{
 }
 
 .done{
-    color:#22c55e;
+    opacity:.5;
     text-decoration:line-through;
-    opacity:.6;
+    color:#22c55e;
 }
 
 .pending{
     color:#9ca3af;
 }
 
-/* =========================
-   ACTION BUTTONS
-========================= */
+/* BUTTONS */
 .actions{
     display:flex;
     gap:12px;
@@ -312,14 +269,8 @@ body::after{
     border:none;
     border-radius:14px;
     background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:black;
     font-weight:bold;
     cursor:pointer;
-    transition:.3s;
-}
-
-.action-btn:hover{
-    transform:scale(1.06);
 }
 
 .secondary{
@@ -328,20 +279,13 @@ body::after{
     color:#22c55e;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 @media (max-width:500px){
-
-    .logo{
+    .hero-title{
         font-size:38px;
     }
 
     .actions{
         flex-direction:column;
-    }
-
-    .auth-card{
-        padding:18px;
     }
 }
