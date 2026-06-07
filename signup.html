@@ -1,69 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QUEST - Sign Up</title>
 <link rel="stylesheet" href="style.css">
-</head>
+</head><body><div class="auth-page page"><div class="hero-logo">Q</div>
 
-<body>
+<h1 class="hero-title">
+    QUEST
+</h1>
 
-<!-- AUTH PAGE -->
-<div class="auth-page page">
+<p class="hero-tagline">
+    Start Your Journey • Level Up Your Life
+</p>
 
-    <!-- HERO BRAND -->
-    <div class="hero-logo">Q</div>
-    <h1 class="hero-title">QUEST</h1>
-    <p class="hero-tagline">Start Your Journey • Level Up Your Life</p>
+<div class="auth-card">
 
-    <!-- SIGNUP CARD -->
-    <div class="auth-card">
+    <input
+        type="text"
+        id="name"
+        placeholder="Full Name">
 
-        <input type="text" id="name" placeholder="Full Name">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
+    <input
+        type="email"
+        id="email"
+        placeholder="Email">
 
-        <button class="primary-btn" onclick="signup()">Create Account</button>
+    <input
+        type="password"
+        id="password"
+        placeholder="Password">
 
-        <button class="secondary-btn" onclick="goLogin()">Back to Login</button>
+    <button
+        class="primary-btn"
+        onclick="signup()">
 
-    </div>
+        Create Account
+
+    </button>
+
+    <button
+        class="secondary-btn"
+        onclick="goLogin()">
+
+        Back To Login
+
+    </button>
 
 </div>
 
-<script>
-/* =========================
-   SIGNUP SYSTEM (V3)
-========================= */
+</div><script type="module">
 
-function signup(){
+import {
+    auth,
+    db
+} from "./firebase-config.js";
 
-    let name = document.getElementById("name").value;
+import {
+    createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    if(name.trim() === ""){
-        alert("Please enter your name");
+import {
+    doc,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+window.signup = async function() {
+
+    const name =
+        document.getElementById("name").value;
+
+    const email =
+        document.getElementById("email").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!name || !email || !password) {
+
+        alert("Please fill all fields");
         return;
+
     }
 
-    // save user session
-    localStorage.setItem("loggedIn", "true");
-    localStorage.setItem("username", name);
-    localStorage.setItem("xp", "0");
-    localStorage.setItem("level", "1");
+    try {
 
-    // redirect to app
-    window.location.href = "dashboard.html";
-}
+        const userCredential =
+            await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
-/* =========================
-   NAVIGATION
-========================= */
+        const user =
+            userCredential.user;
 
-function goLogin(){
-    window.location.href = "login.html";
-}
-</script>
+        await setDoc(
+            doc(db, "users", user.uid),
+            {
+                name: name,
+                email: email,
+                xp: 0,
+                level: 1,
+                streak: 0,
+                createdAt:
+                    new Date().toISOString()
+            }
+        );
 
-</body>
+        alert(
+            "Account created successfully"
+        );
+
+        window.location.href =
+            "dashboard.html";
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+};
+
+window.goLogin = function() {
+
+    window.location.href =
+        "login.html";
+
+};
+
+</script></body>
 </html>
