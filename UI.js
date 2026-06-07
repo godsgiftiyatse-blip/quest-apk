@@ -1,42 +1,23 @@
 /* =========================
-   QUEST V3 GAME ENGINE
+   QUEST UI ENGINE (CLEAN)
+   No localStorage, no Firestore
+   PURE UI ONLY
 ========================= */
 
-let xp = parseInt(localStorage.getItem("xp")) || 0;
-let level = parseInt(localStorage.getItem("level")) || 1;
-
-function addXP(amount){
-
-    xp += amount;
-
-    let newLevel = Math.floor(xp / 100) + 1;
-
-    if(newLevel > level){
-        level = newLevel;
-        showLevelUp(level);
-    }
-
-    localStorage.setItem("xp", xp);
-    localStorage.setItem("level", level);
-
-    showXP(amount);
-    updateUI();
-}
-
 /* XP POPUP */
-function showXP(amount){
+export function showXP(amount){
 
     let popup = document.createElement("div");
     popup.className = "xp-popup";
-    popup.innerText = "+ " + amount + " XP";
+    popup.innerText = `+ ${amount} XP`;
 
     document.body.appendChild(popup);
 
-    setTimeout(()=> popup.remove(), 1200);
+    setTimeout(() => popup.remove(), 1200);
 }
 
 /* LEVEL UP MODAL */
-function showLevelUp(level){
+export function showLevelUp(level){
 
     let modal = document.createElement("div");
     modal.className = "level-modal";
@@ -50,30 +31,41 @@ function showLevelUp(level){
 
     document.body.appendChild(modal);
 
-    setTimeout(()=> modal.remove(), 2000);
+    setTimeout(() => modal.remove(), 2000);
 }
 
-/* TASK COMPLETE */
-function completeTask(el){
+/* TASK COMPLETE UI HANDLER */
+export function completeTask(el, onComplete){
 
     if(el.classList.contains("done")) return;
 
     el.classList.add("done");
 
-    addXP(20);
+    // Let dashboard.js handle XP logic
+    if(typeof onComplete === "function"){
+        onComplete();
+    }
 }
 
 /* =========================
-   SIMPLE UI UPDATE HOOK
+   UI UPDATE (READ ONLY)
+   You pass values from Firestore
 ========================= */
-function updateUI(){
+export function updateUI(level, xp){
+
     let levelText = document.getElementById("level");
     let xpText = document.getElementById("xpText");
     let progress = document.getElementById("progressBar");
 
     if(levelText){
         levelText.innerText = "Level " + level;
+    }
+
+    if(xpText){
         xpText.innerText = xp + " XP";
+    }
+
+    if(progress){
         progress.style.width = (xp % 100) + "%";
     }
 }
