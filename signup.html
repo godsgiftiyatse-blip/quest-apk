@@ -50,12 +50,6 @@ button:hover {
     background: #365edb;
 }
 
-.small {
-    font-size: 12px;
-    color: #aaa;
-    margin-top: 10px;
-}
-
 .error {
     color: #ff5c5c;
     font-size: 13px;
@@ -71,12 +65,17 @@ button:hover {
     <h2>🧾 Create Hero</h2>
 
     <form id="signupForm">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
+
+        <!-- 🔥 NEW NAME FIELD -->
+        <input type="text" id="username" placeholder="Username (Hero Name)" required>
+
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
 
         <button id="signupBtn" type="submit">Start Adventure</button>
 
         <div class="error" id="error"></div>
+
     </form>
 
     <button onclick="googleSignup()">🔵 Google Signup</button>
