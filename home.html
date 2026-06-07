@@ -3,8 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - QUEST</title>
+  <title>QUEST Dashboard</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .progress-bar{
+      width:100%;
+      height:12px;
+      background:#1E293B;
+      border-radius:20px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .progress{
+      height:100%;
+      width:0%;
+      background:#29F19C;
+      transition:0.3s ease;
+    }
+
+    .level-badge{
+      display:inline-block;
+      padding:6px 12px;
+      background:#29F19C;
+      color:black;
+      border-radius:20px;
+      font-weight:700;
+      margin-top:10px;
+    }
+
+    .stat-box{
+      margin-top:15px;
+      padding:15px;
+      background:#0D1524;
+      border-radius:16px;
+    }
+  </style>
 </head>
 
 <body>
@@ -13,28 +48,36 @@
 
   <div class="auth-card" style="margin-top:60px">
 
-    <h1 class="auth-title">Daily Quests</h1>
+    <h1 class="auth-title">Dashboard</h1>
 
     <p class="auth-subtitle" id="userInfo">Loading...</p>
 
-    <p style="margin-top:15px;color:#29F19C;font-weight:700;" id="stats">
-      XP: 0 | Level: 1
-    </p>
+    <div class="level-badge" id="levelBadge">Level 1</div>
+
+    <div class="stat-box">
+
+      <p style="font-weight:700;">XP Progress</p>
+
+      <div class="progress-bar">
+        <div class="progress" id="xpBar"></div>
+      </div>
+
+      <p style="margin-top:10px;" id="xpText">XP: 0 / 100</p>
+
+    </div>
 
     <div style="margin-top:25px;">
 
-      <h3 style="margin-bottom:10px;">Today’s Missions</h3>
-
-      <button class="btn-primary" onclick="completeQuest('login')">
-        Daily Login (+5 XP)
+      <button class="btn-primary" onclick="completeQuest(10)">
+        Easy Quest (+10 XP)
       </button>
 
-      <button class="btn-primary" style="margin-top:10px;" onclick="completeQuest('task')">
-        Complete Task (+15 XP)
+      <button class="btn-primary" style="margin-top:10px;" onclick="completeQuest(25)">
+        Medium Quest (+25 XP)
       </button>
 
-      <button class="btn-secondary" style="margin-top:10px;" onclick="completeQuest('hard')">
-        Hard Quest (+30 XP)
+      <button class="btn-secondary" style="margin-top:10px;" onclick="completeQuest(50)">
+        Hard Quest (+50 XP)
       </button>
 
     </div>
@@ -52,9 +95,8 @@
   import { getAuth, onAuthStateChanged, signOut } 
   from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  import { 
-    getFirestore, doc, getDoc, updateDoc, increment, setDoc 
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, updateDoc } 
+  from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -69,9 +111,7 @@
 
   let userRef;
   let userData;
-  let currentUser;
 
-  // 🔐 AUTH + LOAD DATA
   onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
@@ -79,31 +119,10 @@
       return;
     }
 
-    currentUser = user;
     userRef = doc(db, "users", user.uid);
-
     const snap = await getDoc(userRef);
+
     userData = snap.data();
-
-    // 🧠 DAILY RESET CHECK
-    const today = new Date().toDateString();
-
-    if (userData.lastLogin !== today) {
-      await updateDoc(userRef, {
-        lastLogin: today,
-        dailyTasks: {
-          login: false,
-          task: false,
-          hard: false
-        }
-      });
-
-      userData.dailyTasks = {
-        login: false,
-        task: false,
-        hard: false
-      };
-    }
 
     document.getElementById("userInfo").textContent =
       "Welcome " + userData.name;
@@ -111,36 +130,21 @@
     updateUI();
   });
 
-  // 🎮 COMPLETE QUEST SYSTEM
-  window.completeQuest = async function (type) {
+  window.completeQuest = async function (xpGain) {
 
-    if (userData.dailyTasks[type]) {
-      alert("Already completed today!");
-      return;
-    }
-
-    let reward = 0;
-
-    if (type === "login") reward = 5;
-    if (type === "task") reward = 15;
-    if (type === "hard") reward = 30;
-
-    let newXP = userData.xp + reward;
+    let newXP = userData.xp + xpGain;
     let newLevel = userData.level;
 
-    // 🏆 LEVEL UP LOGIC
-    if (newXP >= newLevel * 100) {
-      newLevel++;
-      newXP = 0;
-      alert("LEVEL UP! 🎉 Now Level " + newLevel);
-    }
+    let maxXP = newLevel * 100;
 
-    userData.dailyTasks[type] = true;
+    if (newXP >= maxXP) {
+      newLevel++;
+      newXP = newXP - maxXP;
+    }
 
     await updateDoc(userRef, {
       xp: newXP,
-      level: newLevel,
-      dailyTasks: userData.dailyTasks
+      level: newLevel
     });
 
     userData.xp = newXP;
@@ -150,11 +154,20 @@
   };
 
   function updateUI() {
-    document.getElementById("stats").textContent =
-      "XP: " + userData.xp + " | Level: " + userData.level;
+
+    let maxXP = userData.level * 100;
+    let percent = (userData.xp / maxXP) * 100;
+
+    document.getElementById("levelBadge").textContent =
+      "Level " + userData.level;
+
+    document.getElementById("xpText").textContent =
+      "XP: " + userData.xp + " / " + maxXP;
+
+    document.getElementById("xpBar").style.width =
+      percent + "%";
   }
 
-  // 🚪 LOGOUT
   window.logout = async function () {
     await signOut(auth);
     window.location.href = "login.html";
@@ -162,4 +175,4 @@
 </script>
 
 </body>
-        </html>
+</html>
