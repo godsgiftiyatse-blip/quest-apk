@@ -82,32 +82,11 @@
 
 </div>
 
-<!-- APP SCRIPT -->
+<!-- LOCAL APP SCRIPT -->
 <script src="app.js"></script>
 
-<script>
-/* =========================
-   AUTH CHECK
-========================= */
-if(localStorage.getItem("loggedIn") !== "true"){
-    window.location.href = "login.html";
-}
-
-/* =========================
-   LOGOUT
-========================= */
-function logout(){
-    localStorage.removeItem("loggedIn");
-    window.location.href = "login.html";
-}
-
-/* =========================
-   INIT UI ON LOAD
-========================= */
-window.onload = function(){
-    if(window.updateUI) updateUI();
-};
-</script>
+<!-- 🔥 FIREBASE / MODERN DASHBOARD SCRIPT -->
+<script type="module" src="dashboard.js"></script>
 
 </body>
 </html>
