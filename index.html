@@ -1,73 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUEST Dashboard</title>
+<title>Dashboard - QUEST</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
 
     <div class="user-info">
-        <h3>Good Morning 👋</h3>
-        <p>Ambitious Explorer</p>
+        <h3 id="greeting">Welcome 👋</h3>
+        <p id="levelText">Level 1 Explorer</p>
     </div>
 
-    <div class="avatar">K</div>
+    <div class="avatar">Q</div>
 
 </div>
 
-<!-- MAIN DASHBOARD -->
 <div class="dashboard">
 
     <!-- XP CARD -->
     <div class="card xp-card">
 
         <div class="level-row">
-            <h2>Level 7</h2>
-            <span>620 / 1000 XP</span>
+            <h2 id="level">Level 1</h2>
+            <span id="xpText">0 / 100 XP</span>
         </div>
 
         <div class="progress-bar">
-            <div class="progress"></div>
+            <div class="progress" id="progressBar"></div>
         </div>
 
     </div>
 
     <!-- CURRENT QUEST -->
     <div class="card">
-
         <h3>Current Quest</h3>
         <p class="quest-title">WAEC Excellence</p>
-
-        <div class="progress-text">60% Complete</div>
-
+        <p class="progress-text">Complete tasks to gain XP</p>
     </div>
 
-    <!-- TODAY TASKS -->
+    <!-- TASKS -->
     <div class="card">
 
         <h3>Today's Tasks</h3>
 
-        <div class="task done">✔ <span>Study Mathematics</span></div>
-        <div class="task pending">○ <span>Solve Past Questions</span></div>
-        <div class="task pending">○ <span>Review Notes</span></div>
+        <div class="task" onclick="completeTask(this)">
+            ○ <span>Study Mathematics (+20 XP)</span>
+        </div>
 
-    </div>
+        <div class="task" onclick="completeTask(this)">
+            ○ <span>Solve Past Questions (+20 XP)</span>
+        </div>
 
-    <!-- QUICK ACTIONS -->
-    <div class="actions">
-
-        <button class="action-btn">➕ Add Task</button>
-        <button class="action-btn secondary">🏆 View Achievements</button>
+        <div class="task" onclick="completeTask(this)">
+            ○ <span>Revise Notes (+20 XP)</span>
+        </div>
 
     </div>
 
 </div>
+
+<script>
+/* =========================
+   QUEST XP SYSTEM
+========================= */
+
+let xp = parseInt(localStorage.getItem("xp")) || 0;
+let completed = JSON.parse(localStorage.getItem("completed")) || [];
+
+function updateUI(){
+
+    let level = Math.floor(xp / 100) + 1;
+    let progress = xp % 100;
+
+    document.getElementById("level").innerText = "Level " + level;
+    document.getElementById("xpText").innerText = xp + " / " + (level * 100) + " XP";
+    document.getElementById("progressBar").style.width = progress + "%";
+    document.getElementById("levelText").innerText = "Level " + level + " Explorer";
+
+}
+
+/* COMPLETE TASK */
+function completeTask(el){
+
+    let taskText = el.innerText;
+
+    if(completed.includes(taskText)){
+        alert("Task already completed!");
+        return;
+    }
+
+    completed.push(taskText);
+    xp += 20;
+
+    el.style.textDecoration = "line-through";
+    el.style.opacity = "0.5";
+
+    localStorage.setItem("xp", xp);
+    localStorage.setItem("completed", JSON.stringify(completed));
+
+    updateUI();
+}
+
+/* LOAD SAVED TASKS */
+function loadTasks(){
+    let tasks = document.querySelectorAll(".task");
+
+    tasks.forEach(task => {
+        if(completed.includes(task.innerText)){
+            task.style.textDecoration = "line-through";
+            task.style.opacity = "0.5";
+        }
+    });
+}
+
+updateUI();
+loadTasks();
+
+</script>
 
 </body>
 </html>
