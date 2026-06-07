@@ -4,23 +4,23 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  increment,
   arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { showXP, showLevelUp, updateUI } from "./ui.js";
 
 /* =========================
-   LOAD USER (MULTIPLAYER SAFE)
+   LOAD USER (SAFE + STABLE)
 ========================= */
 export async function loadUser() {
-
   const user = auth.currentUser;
+
+  if (!user) return null;
+
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-
     const newUser = {
       username: user.email.split("@")[0],
       xp: 0,
@@ -39,19 +39,24 @@ export async function loadUser() {
 }
 
 /* =========================
-   ADD XP (SYNC + LEADERBOARD)
+   ADD XP (SAFE + SYNCED)
 ========================= */
 export async function addXP(amount) {
-
   const user = auth.currentUser;
+  if (!user) return;
 
   const userRef = doc(db, "users", user.uid);
   const boardRef = doc(db, "leaderboard", user.uid);
 
   const snap = await getDoc(userRef);
+  if (!snap.exists()) return;
+
   const data = snap.data();
 
-  const newXP = (data.xp || 0) + amount;
+  const currentXP = data.xp || 0;
+  const currentLevel = data.level || 1;
+
+  const newXP = currentXP + amount;
   const newLevel = Math.floor(newXP / 100) + 1;
 
   await updateDoc(userRef, {
@@ -67,7 +72,7 @@ export async function addXP(amount) {
   showXP(amount);
   updateUI(newLevel, newXP);
 
-  if (newLevel > data.level) {
+  if (newLevel > currentLevel) {
     showLevelUp(newLevel);
   }
 }
@@ -76,14 +81,19 @@ export async function addXP(amount) {
    COMPLETE TASK (ANTI DUPLICATE)
 ========================= */
 export async function completeTask(taskId, reward) {
-
   const user = auth.currentUser;
+  if (!user) return;
+
   const ref = doc(db, "users", user.uid);
 
   const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+
   const data = snap.data();
 
-  if ((data.completedTasks || []).includes(taskId)) return;
+  const completed = data.completedTasks || [];
+
+  if (completed.includes(taskId)) return;
 
   await updateDoc(ref, {
     completedTasks: arrayUnion(taskId)
