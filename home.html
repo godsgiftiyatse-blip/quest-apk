@@ -13,10 +13,12 @@
 
   <div class="auth-card" style="margin-top:60px">
 
-    <h1 class="auth-title">Welcome 🎉</h1>
+    <h1 class="auth-title">Your Quest</h1>
 
-    <p class="auth-subtitle" id="userInfo">
-      Loading...
+    <p class="auth-subtitle" id="userInfo">Loading...</p>
+
+    <p style="margin-top:20px;color:#29F19C;font-weight:700;" id="stats">
+      XP: 0 | Level: 1
     </p>
 
     <button class="btn-primary" onclick="logout()">
@@ -29,17 +31,11 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { 
-    getAuth, 
-    onAuthStateChanged, 
-    signOut 
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut } 
+  from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  import { 
-    getFirestore, 
-    doc, 
-    getDoc 
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { getFirestore, doc, getDoc } 
+  from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -52,7 +48,6 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // 🔐 Protect page + load user data
   onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
@@ -65,16 +60,17 @@
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+
       document.getElementById("userInfo").textContent =
-        "Welcome " + data.name + " (" + data.email + ")";
-    } else {
-      document.getElementById("userInfo").textContent =
-        "Welcome " + user.email;
+        "Welcome " + data.name;
+
+      document.getElementById("stats").textContent =
+        "XP: " + data.xp + " | Level: " + data.level;
+
     }
 
   });
 
-  // 🚪 Logout
   window.logout = async function () {
     await signOut(auth);
     window.location.href = "login.html";
