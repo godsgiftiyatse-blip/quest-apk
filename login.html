@@ -1,76 +1,47 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUEST - Login</title>
-<link rel="stylesheet" href="style.css">
-</head><body><div class="auth-page page"><div class="hero-logo">Q</div>
-<h1 class="hero-title">QUEST</h1>
-<p class="hero-tagline">Welcome Back • Continue Your Journey</p>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quest</title>
 
-<div class="auth-card">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
+    <div class="auth-container">
 
-    <button class="primary-btn" onclick="login()">
-        Login
-    </button>
+        <h2>Login</h2>
 
-    <button class="secondary-btn" onclick="goSignup()">
-        Create Account
-    </button>
+        <form id="loginForm">
 
-</div>
+            <input 
+                type="email" 
+                id="email" 
+                placeholder="Enter your email" 
+                required
+            />
 
-</div><script type="module">
+            <input 
+                type="password" 
+                id="password" 
+                placeholder="Enter your password" 
+                required
+            />
 
-import { auth } from "./firebase-config.js";
+            <button type="submit">Login</button>
 
-import {
-    signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        </form>
 
-window.login = async function() {
+        <p>
+            Don't have an account? 
+            <a href="signup.html">Sign Up</a>
+        </p>
 
-    const email =
-        document.getElementById("email").value;
+    </div>
 
-    const password =
-        document.getElementById("password").value;
+    <!-- Firebase login logic -->
+    <script type="module" src="login.js"></script>
 
-    if (!email || !password) {
-        alert("Please fill all fields");
-        return;
-    }
-
-    try {
-
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-
-        alert("Login successful");
-
-        window.location.href =
-            "dashboard.html";
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-};
-
-window.goSignup = function() {
-
-    window.location.href =
-        "signup.html";
-
-};
-
-</script></body>
+</body>
 </html>
