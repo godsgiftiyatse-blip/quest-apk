@@ -21,7 +21,17 @@
       XP: 0 | Level: 1
     </p>
 
-    <button class="btn-primary" onclick="logout()">
+    <div style="margin-top:25px;">
+      <button class="btn-primary" onclick="earnXP(10)">
+        Complete Task (+10 XP)
+      </button>
+
+      <button class="btn-secondary" onclick="earnXP(25)">
+        Hard Quest (+25 XP)
+      </button>
+    </div>
+
+    <button class="btn-primary" style="margin-top:15px;" onclick="logout()">
       Logout
     </button>
 
@@ -34,7 +44,7 @@
   import { getAuth, onAuthStateChanged, signOut } 
   from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  import { getFirestore, doc, getDoc } 
+  import { getFirestore, doc, getDoc, updateDoc, increment } 
   from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -48,6 +58,11 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  let currentUser = null;
+  let userRef = null;
+  let userData = null;
+
+  // 🔐 AUTH + LOAD DATA
   onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
@@ -55,22 +70,57 @@
       return;
     }
 
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
+    currentUser = user;
+    userRef = doc(db, "users", user.uid);
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    const snap = await getDoc(userRef);
+
+    if (snap.exists()) {
+      userData = snap.data();
 
       document.getElementById("userInfo").textContent =
-        "Welcome " + data.name;
+        "Welcome " + userData.name;
 
-      document.getElementById("stats").textContent =
-        "XP: " + data.xp + " | Level: " + data.level;
-
+      updateUI();
     }
 
   });
 
+  // 🎮 XP ENGINE
+  window.earnXP = async function (amount) {
+
+    if (!currentUser) return;
+
+    const snap = await getDoc(userRef);
+    const data = snap.data();
+
+    let newXP = data.xp + amount;
+    let newLevel = data.level;
+
+    // 🏆 LEVEL SYSTEM
+    if (newXP >= newLevel * 100) {
+      newLevel += 1;
+      newXP = 0;
+      alert("Level Up! 🎉 You are now Level " + newLevel);
+    }
+
+    await updateDoc(userRef, {
+      xp: newXP,
+      level: newLevel
+    });
+
+    userData.xp = newXP;
+    userData.level = newLevel;
+
+    updateUI();
+  };
+
+  function updateUI() {
+    document.getElementById("stats").textContent =
+      "XP: " + userData.xp + " | Level: " + userData.level;
+  }
+
+  // 🚪 LOGOUT
   window.logout = async function () {
     await signOut(auth);
     window.location.href = "login.html";
