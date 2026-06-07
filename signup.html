@@ -1,57 +1,70 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>Login - QUEST</title>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup - QUEST</title>
   <link rel="stylesheet" href="style.css">
-</head>  
-<body>  <div class="container">    <div style="margin-top:60px">  <h1 style="font-size:36px;">  
-  Welcome Back 👋  
-</h1>  
+</head>
 
-<p style="color:#94A3B8;margin-top:10px;">  
-  Continue your journey  
-</p>  
+<body>
 
-<div style="margin-top:40px;">  
+<div class="container">
 
-  <input  
-    type="email"  
-    id="email"  
-    placeholder="Email"  
-  >  
+  <div style="margin-top:60px">
 
-  <input  
-    type="password"  
-    id="password"  
-    placeholder="Password"  
-  >  
+    <h1 style="font-size:36px;">
+      Create Account
+    </h1>
 
-  <button  
-    class="btn-primary"  
-    onclick="login()"  
-  >  
-    Login  
-  </button>  
+    <p style="color:#94A3B8;margin-top:10px;">
+      Begin your quest today
+    </p>
 
-  <p style="text-align:center;margin-top:20px;">  
-    Don't have an account?  
-    <a  
-      href="signup.html"  
-      style="color:#29F19C;"  
-    >  
-      Sign Up  
-    </a>  
-  </p>  
+    <div style="margin-top:40px;">
+
+      <input
+        type="text"
+        id="name"
+        placeholder="Full Name"
+      >
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button class="btn-primary" onclick="signup()">
+        Sign Up
+      </button>
+
+      <p style="text-align:center;margin-top:20px;">
+        Already have an account?
+        <a href="login.html" style="color:#29F19C;">
+          Login
+        </a>
+      </p>
+
+    </div>
+
+  </div>
 
 </div>
 
-  </div>  </div>  <script type="module">
+<!-- 🔥 FIREBASE -->
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+  import { getAuth, createUserWithEmailAndPassword } 
   from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  // 🔥 Your Firebase config (replace with yours)
+  // 🔥 REPLACE WITH YOUR REAL FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -62,9 +75,25 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // Make auth global so functions can use it
-  window.auth = auth;
-  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-  </script> </body>  
-</html>  
+  // SIGNUP FUNCTION
+  window.signup = async function () {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+
+      alert("Account created successfully!");
+
+      // optional: redirect to login
+      window.location.href = "login.html";
+
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+</script>
+
+</body>
+</html>
