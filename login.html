@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUEST - Login</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="auth-page">
+<!-- AUTH PAGE -->
+<div class="auth-page page">
 
+    <!-- HERO BRAND -->
     <div class="hero-logo">Q</div>
     <h1 class="hero-title">QUEST</h1>
-    <p class="hero-tagline">Level Up Your Life</p>
+    <p class="hero-tagline">Welcome Back • Continue Your Journey</p>
 
+    <!-- LOGIN CARD -->
     <div class="auth-card">
 
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
 
         <button class="primary-btn" onclick="login()">Login</button>
+
         <button class="secondary-btn" onclick="goSignup()">Create Account</button>
 
     </div>
@@ -25,13 +32,35 @@
 </div>
 
 <script>
+/* =========================
+   LOGIN SYSTEM (V3)
+========================= */
+
 function login(){
-    localStorage.setItem("loggedIn","true");
-    window.location.href="dashboard.html";
+
+    let email = document.getElementById("email").value;
+
+    if(email.trim() === ""){
+        alert("Please enter your email");
+        return;
+    }
+
+    // simulate login success
+    localStorage.setItem("loggedIn", "true");
+
+    // optional: store email
+    localStorage.setItem("email", email);
+
+    // redirect to dashboard
+    window.location.href = "dashboard.html";
 }
 
+/* =========================
+   NAVIGATION
+========================= */
+
 function goSignup(){
-    window.location.href="signup.html";
+    window.location.href = "signup.html";
 }
 </script>
 
