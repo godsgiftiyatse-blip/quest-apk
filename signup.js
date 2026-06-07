@@ -1,25 +1,42 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  createUserWithEmailAndPassword
+    createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  doc,
-  setDoc
+    doc,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
+/* UI ELEMENTS */
+const form = document.getElementById("signupForm");
+const errorBox = document.getElementById("error");
+const btn = document.getElementById("signupBtn");
+
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    try {
-        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    // reset UI
+    errorBox.innerText = "";
+    btn.innerText = "Creating account...";
+    btn.disabled = true;
 
-        // create user profile in Firestore
-        await setDoc(doc(db, "users", userCred.user.uid), {
+    try {
+        // 🔐 create auth user
+        const userCred = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        const user = userCred.user;
+
+        // 📦 create Firestore profile
+        await setDoc(doc(db, "users", user.uid), {
             xp: 0,
             level: 1,
             streak: 0,
@@ -27,9 +44,14 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
             completedTasks: []
         });
 
+        // success → redirect
         window.location.href = "dashboard.html";
 
     } catch (error) {
-        alert("Signup failed: " + error.message);
+        errorBox.innerText = error.message;
+
+    } finally {
+        btn.innerText = "Sign Up";
+        btn.disabled = false;
     }
 });
