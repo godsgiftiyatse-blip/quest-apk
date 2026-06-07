@@ -1,87 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>QUEST App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUEST Dashboard</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
-        <h1>QUEST</h1>
-        <button onclick="toggleMode()">🌙</button>
+<!-- TOP BAR -->
+<div class="topbar">
+
+    <div class="user-info">
+        <h3>Good Morning 👋</h3>
+        <p>Ambitious Explorer</p>
     </div>
 
-    <!-- PROFILE -->
-    <div class="profile">
-        <h3 id="username">Student</h3>
+    <div class="avatar">K</div>
 
-        <input
-            id="nameInput"
-            placeholder="Enter your name"
-        >
+</div>
 
-        <button onclick="saveName()">
-            Save
-        </button>
+<!-- MAIN DASHBOARD -->
+<div class="dashboard">
 
-        <button onclick="logout()">
-            Logout
-        </button>
-    </div>
+    <!-- XP CARD -->
+    <div class="card xp-card">
 
-    <!-- STATS -->
-    <div class="stats">
-
-        <div class="card">
-            <h3>Level</h3>
-            <p id="level">1</p>
+        <div class="level-row">
+            <h2>Level 7</h2>
+            <span>620 / 1000 XP</span>
         </div>
 
-        <div class="card">
-            <h3>XP</h3>
-            <p id="xp">0</p>
-        </div>
-
-        <div class="card">
-            <h3>🔥 Streak</h3>
-            <p id="streak">0</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
         </div>
 
     </div>
 
-    <!-- AI QUESTS -->
-    <h2 class="section-title">
-        🧠 AI Quests
-    </h2>
+    <!-- CURRENT QUEST -->
+    <div class="card">
 
-    <div id="questContainer"></div>
+        <h3>Current Quest</h3>
+        <p class="quest-title">WAEC Excellence</p>
 
-    <button onclick="generateQuests()">
-        🔄 Generate New Quests
-    </button>
+        <div class="progress-text">60% Complete</div>
 
-    <!-- BADGES -->
-    <h2 class="section-title">
-        🏅 Achievements
-    </h2>
-
-    <div class="badges">
-        <p id="badge1">🔒 Beginner</p>
-        <p id="badge2">🔒 Focused Student</p>
-        <p id="badge3">🔒 Elite Learner</p>
     </div>
 
-    <!-- BOTTOM NAV -->
-    <div class="bottom-nav">
-        <div>🏠 Home</div>
-        <div>🎯 Quests</div>
-        <div>🏆 Achievements</div>
-        <div>👤 Profile</div>
+    <!-- TODAY TASKS -->
+    <div class="card">
+
+        <h3>Today's Tasks</h3>
+
+        <div class="task done">✔ <span>Study Mathematics</span></div>
+        <div class="task pending">○ <span>Solve Past Questions</span></div>
+        <div class="task pending">○ <span>Review Notes</span></div>
+
     </div>
 
-    <script src="script.js"></script>
+    <!-- QUICK ACTIONS -->
+    <div class="actions">
+
+        <button class="action-btn">➕ Add Task</button>
+        <button class="action-btn secondary">🏆 View Achievements</button>
+
+    </div>
+
+</div>
 
 </body>
 </html>
