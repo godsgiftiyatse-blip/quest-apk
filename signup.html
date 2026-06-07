@@ -3,65 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - QUEST</title>
+  <title>Signup - QUEST</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
 <div class="container">
 
-  <div style="margin-top:60px">
+  <div class="auth-card">
 
-    <h1>Create Account</h1>
+    <h1 class="auth-title">Create Account</h1>
 
-    <p style="color:#94A3B8;margin-top:10px;">
-      Begin your quest today
+    <p class="auth-subtitle">Begin your quest today</p>
+
+    <input type="text" placeholder="Full Name">
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+
+    <button class="btn-primary">Sign Up</button>
+
+    <p class="auth-footer">
+      Already have an account?
+      <a class="auth-link" href="login.html">Login</a>
     </p>
-
-    <div style="margin-top:40px;">
-
-      <input
-        type="text"
-        id="username"
-        placeholder="Username"
-      >
-
-      <input
-        type="email"
-        id="email"
-        placeholder="Email"
-      >
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Password"
-      >
-
-      <button
-        class="btn-primary"
-        onclick="signup()"
-      >
-        Create Account
-      </button>
-
-      <p style="text-align:center;margin-top:20px;">
-        Already have an account?
-        <a
-          href="login.html"
-          style="color:#29F19C;"
-        >
-          Login
-        </a>
-      </p>
-
-    </div>
 
   </div>
 
 </div>
-
-<script type="module" src="js/auth.js"></script>
 
 </body>
 </html>
