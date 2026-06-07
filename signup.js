@@ -1,57 +1,62 @@
-import { auth, db } from "./firebase.js";
-
+import { auth, db, provider } from "./firebase.js";
 import {
-    createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    doc,
-    setDoc
+  doc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* UI ELEMENTS */
 const form = document.getElementById("signupForm");
 const errorBox = document.getElementById("error");
 const btn = document.getElementById("signupBtn");
 
 form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const email = email.value;
+  const password = password.value;
 
-    // reset UI
-    errorBox.innerText = "";
-    btn.innerText = "Creating account...";
-    btn.disabled = true;
+  btn.innerText = "Creating...";
+  btn.disabled = true;
 
-    try {
-        // 🔐 create auth user
-        const userCred = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-        const user = userCred.user;
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      xp: 0,
+      level: 1,
+      streak: 0,
+      completedTasks: [],
+      createdAt: new Date().toISOString()
+    });
 
-        // 📦 create Firestore profile
-        await setDoc(doc(db, "users", user.uid), {
-            xp: 0,
-            level: 1,
-            streak: 0,
-            lastLogin: new Date().toISOString(),
-            completedTasks: []
-        });
-
-        // success → redirect
-        window.location.href = "dashboard.html";
-
-    } catch (error) {
-        errorBox.innerText = error.message;
-
-    } finally {
-        btn.innerText = "Sign Up";
-        btn.disabled = false;
-    }
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    errorBox.innerText = err.message;
+  } finally {
+    btn.innerText = "Sign Up";
+    btn.disabled = false;
+  }
 });
+
+window.googleSignup = async () => {
+  try {
+    const res = await signInWithPopup(auth, provider);
+    const user = res.user;
+
+    await setDoc(doc(db, "users", user.uid), {
+      xp: 0,
+      level: 1,
+      streak: 0,
+      completedTasks: [],
+      createdAt: new Date().toISOString()
+    });
+
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    errorBox.innerText = err.message;
+  }
+};
