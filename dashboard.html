@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quest Dashboard</title>
+    <title>Quest Game</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- =========================
-         USER DASHBOARD UI
-    ========================== -->
     <div class="panel">
         <h2 id="level">Level 1</h2>
         <p id="xpText">0 XP</p>
@@ -21,20 +18,10 @@
         </div>
     </div>
 
-    <!-- Example Task Button -->
-    <button class="task-btn" id="task1">Complete Task</button>
+    <button id="task1">Task 1 (+20 XP)</button>
+    <button id="task2">Task 2 (+50 XP)</button>
+    <button id="task3">Task 3 (+100 XP)</button>
 
-    <!-- =========================
-         SCRIPTS (MODULE SYSTEM)
-    ========================== -->
-
-    <!-- Firebase setup -->
-    <script type="module" src="firebase.js"></script>
-
-    <!-- UI effects only (popups, animations) -->
-    <script type="module" src="ui.js"></script>
-
-    <!-- MAIN GAME LOGIC (XP, LEVEL, FIREBASE) -->
     <script type="module" src="dashboard.js"></script>
 
 </body>
