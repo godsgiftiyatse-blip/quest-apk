@@ -1,134 +1,47 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUEST - Sign Up</title>
-<link rel="stylesheet" href="style.css">
-</head><body><div class="auth-page page"><div class="hero-logo">Q</div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Quest</title>
 
-<h1 class="hero-title">
-    QUEST
-</h1>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<p class="hero-tagline">
-    Start Your Journey • Level Up Your Life
-</p>
+    <div class="auth-container">
 
-<div class="auth-card">
+        <h2>Create Account</h2>
 
-    <input
-        type="text"
-        id="name"
-        placeholder="Full Name">
+        <form id="signupForm">
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Email">
+            <input 
+                type="email" 
+                id="email" 
+                placeholder="Enter your email" 
+                required
+            />
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password">
+            <input 
+                type="password" 
+                id="password" 
+                placeholder="Create password" 
+                required
+            />
 
-    <button
-        class="primary-btn"
-        onclick="signup()">
+            <button type="submit">Sign Up</button>
 
-        Create Account
+        </form>
 
-    </button>
+        <p>
+            Already have an account? 
+            <a href="login.html">Login</a>
+        </p>
 
-    <button
-        class="secondary-btn"
-        onclick="goLogin()">
+    </div>
 
-        Back To Login
+    <!-- Firebase signup logic -->
+    <script type="module" src="signup.js"></script>
 
-    </button>
-
-</div>
-
-</div><script type="module">
-
-import {
-    auth,
-    db
-} from "./firebase-config.js";
-
-import {
-    createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-    doc,
-    setDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-window.signup = async function() {
-
-    const name =
-        document.getElementById("name").value;
-
-    const email =
-        document.getElementById("email").value;
-
-    const password =
-        document.getElementById("password").value;
-
-    if (!name || !email || !password) {
-
-        alert("Please fill all fields");
-        return;
-
-    }
-
-    try {
-
-        const userCredential =
-            await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
-        const user =
-            userCredential.user;
-
-        await setDoc(
-            doc(db, "users", user.uid),
-            {
-                name: name,
-                email: email,
-                xp: 0,
-                level: 1,
-                streak: 0,
-                createdAt:
-                    new Date().toISOString()
-            }
-        );
-
-        alert(
-            "Account created successfully"
-        );
-
-        window.location.href =
-            "dashboard.html";
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-};
-
-window.goLogin = function() {
-
-    window.location.href =
-        "login.html";
-
-};
-
-</script></body>
+</body>
 </html>
