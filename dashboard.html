@@ -1,92 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUEST Dashboard V3</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="page">
+    <!-- =========================
+         USER DASHBOARD UI
+    ========================== -->
+    <div class="panel">
+        <h2 id="level">Level 1</h2>
+        <p id="xpText">0 XP</p>
 
-<!-- TOP BAR -->
-<div class="topbar">
-
-    <div class="user-info">
-        <h3 id="greeting">Welcome 👋</h3>
-        <p id="levelText">Level Explorer</p>
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
     </div>
 
-    <div class="avatar">Q</div>
+    <!-- Example Task Button -->
+    <button class="task-btn" id="task1">Complete Task</button>
 
-</div>
+    <!-- =========================
+         SCRIPTS (MODULE SYSTEM)
+    ========================== -->
 
-<!-- DASHBOARD -->
-<div class="dashboard">
+    <!-- Firebase setup -->
+    <script type="module" src="firebase.js"></script>
 
-    <!-- XP CARD -->
-    <div class="card xp-card">
+    <!-- UI effects only (popups, animations) -->
+    <script type="module" src="ui.js"></script>
 
-        <div class="level-row">
-            <h2 id="level">Level 1</h2>
-            <span id="xpText">0 XP</span>
-        </div>
-
-        <div class="progress-bar">
-            <div class="progress" id="progressBar"></div>
-        </div>
-
-    </div>
-
-    <!-- CURRENT QUEST -->
-    <div class="card">
-        <h3>Current Quest</h3>
-        <p class="quest-title">WAEC Excellence</p>
-        <p class="progress-text">Complete tasks to earn XP</p>
-    </div>
-
-    <!-- TASKS -->
-    <div class="card">
-
-        <h3>Today's Tasks</h3>
-
-        <div class="task" onclick="completeTask(this)">
-            ○ <span>Study Mathematics (+20 XP)</span>
-        </div>
-
-        <div class="task" onclick="completeTask(this)">
-            ○ <span>Solve Past Questions (+20 XP)</span>
-        </div>
-
-        <div class="task" onclick="completeTask(this)">
-            ○ <span>Revise Notes (+20 XP)</span>
-        </div>
-
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="actions">
-        <button class="action-btn">+ Add Task</button>
-        <button class="action-btn secondary" onclick="logout()">Logout</button>
-    </div>
-
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-
-    <div class="nav-item active">🏠<br>Home</div>
-    <div class="nav-item">📚<br>Quests</div>
-    <div class="nav-item">➕<br>Add</div>
-    <div class="nav-item">👤<br>Profile</div>
-
-</div>
-
-<!-- LOCAL APP SCRIPT -->
-<script src="app.js"></script>
-
-<!-- 🔥 FIREBASE / MODERN DASHBOARD SCRIPT -->
-<script type="module" src="dashboard.js"></script>
+    <!-- MAIN GAME LOGIC (XP, LEVEL, FIREBASE) -->
+    <script type="module" src="dashboard.js"></script>
 
 </body>
 </html>
