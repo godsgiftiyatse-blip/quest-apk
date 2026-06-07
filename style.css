@@ -1,175 +1,62 @@
-/* ========== RESET ========== */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-}
-
-body{
-    background:#0a0f1c;
-    color:white;
-    min-height:100vh;
-    overflow-x:hidden;
-}
-
-/* ========== BACKGROUND GLOW ========== */
-body::before{
-    content:"";
-    position:fixed;
-    width:350px;
-    height:350px;
-    background:#22c55e;
-    filter:blur(160px);
-    opacity:.18;
-    top:-120px;
-    right:-120px;
-    z-index:-1;
-}
-
-body::after{
-    content:"";
-    position:fixed;
-    width:300px;
-    height:300px;
-    background:#3b82f6;
-    filter:blur(180px);
-    opacity:.12;
-    bottom:-120px;
-    left:-120px;
-    z-index:-1;
-}
-
-/* ========== FULL SCREEN AUTH LAYOUT ========== */
-.auth-container{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-/* ========== LOGO + TEXT ========== */
-.logo{
-    font-size:60px;
-    font-weight:bold;
-    color:#22c55e;
-    text-align:center;
-    letter-spacing:2px;
-}
-
-.tagline{
-    text-align:center;
-    opacity:.8;
-    margin-bottom:30px;
-}
-
-/* ========== GLASS CARD ========== */
-.auth-card{
-    width:100%;
-    max-width:380px;
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-/* ========== INPUTS ========== */
-.auth-card input{
-    width:100%;
-    background:#0b1220;
-    color:white;
-    border:1px solid #1f2937;
-    padding:16px;
-    font-size:16px;
-    margin-bottom:12px;
-    border-radius:10px;
-    outline:none;
-    transition:.3s;
-}
-
-.auth-card input:focus{
-    border-color:#22c55e;
-    box-shadow:0 0 10px rgba(34,197,94,0.3);
-}
-
-/* ========== BUTTONS ========== */
-button{
-    cursor:pointer;
-    transition:.3s;
-    border:none;
-    border-radius:10px;
-}
-
-.auth-card button{
-    width:100%;
-    padding:16px;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:10px;
-    background:#22c55e;
-    color:black;
-}
-
-.auth-card button:hover{
-    transform:scale(1.04);
-    background:#16a34a;
-}
-
-/* secondary button */
-.btn-secondary{
-    background:transparent;
-    border:1px solid #22c55e;
-    color:#22c55e;
-}
-
-/* ========== DASHBOARD ========== */
-.dashboard{
-    padding:20px;
-}
-
-/* header */
-.header{
+/* ========== TOP BAR ========== */
+.topbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:20px;
+    padding:20px;
+    background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
-.header .greeting{
-    font-size:18px;
-    opacity:.9;
+.user-info h3{
+    font-size:16px;
 }
 
+.user-info p{
+    font-size:12px;
+    opacity:.7;
+}
+
+/* avatar */
 .avatar{
     width:45px;
     height:45px;
     border-radius:50%;
     background:#22c55e;
+    color:black;
     display:flex;
     justify-content:center;
     align-items:center;
     font-weight:bold;
-    color:black;
 }
 
-/* ========== XP CARD ========== */
-.xp-card{
+/* ========== DASHBOARD ========== */
+.dashboard{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+/* generic card */
+.card{
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.1);
     padding:15px;
-    border-radius:15px;
-    margin-bottom:15px;
+    border-radius:16px;
+    backdrop-filter:blur(12px);
 }
 
-.level{
-    font-size:18px;
-    margin-bottom:8px;
+/* XP CARD */
+.xp-card .level-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
 }
 
+/* progress bar */
 .progress-bar{
     width:100%;
     height:10px;
@@ -179,39 +66,35 @@ button{
 }
 
 .progress{
-    width:60%;
+    width:62%;
     height:100%;
     background:#22c55e;
 }
 
-/* ========== QUEST CARD ========== */
-.quest-card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:15px;
-}
-
+/* ========== QUEST TEXT ========== */
 .quest-title{
+    font-size:18px;
     font-weight:bold;
-    margin-bottom:5px;
+    margin:5px 0;
 }
 
-/* tasks */
+.progress-text{
+    font-size:13px;
+    opacity:.7;
+}
+
+/* ========== TASKS ========== */
 .task{
     display:flex;
     align-items:center;
     margin:8px 0;
     font-size:14px;
-    opacity:.9;
 }
 
 .task span{
     margin-left:8px;
 }
 
-/* ========== STATUS ICONS ========== */
 .done{
     color:#22c55e;
 }
@@ -220,18 +103,37 @@ button{
     color:#9ca3af;
 }
 
-/* ========== BUTTON HOVER ANIMATION ========== */
-button:hover{
+/* ========== ACTION BUTTONS ========== */
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.action-btn{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#22c55e;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.action-btn:hover{
     transform:scale(1.05);
 }
 
-/* ========== MOBILE OPTIMIZATION ========== */
-@media (max-width:600px){
-    .logo{
-        font-size:42px;
-    }
+.secondary{
+    background:transparent;
+    border:1px solid #22c55e;
+    color:#22c55e;
+}
 
-    .auth-card{
-        padding:20px;
+/* ========== MOBILE ========== */
+@media (max-width:500px){
+    .actions{
+        flex-direction:column;
     }
 }
