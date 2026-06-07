@@ -11,60 +11,43 @@
 
 <div class="container">
 
-  <div style="margin-top:60px">
+  <div class="auth-card" style="margin-top:60px">
 
-    <h1 style="font-size:36px;">
-      Create Account
-    </h1>
+    <h1 class="auth-title">Create Account</h1>
 
-    <p style="color:#94A3B8;margin-top:10px;">
-      Begin your quest today
+    <p class="auth-subtitle">Begin your quest today</p>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <button class="btn-primary" onclick="signup()">
+      Sign Up
+    </button>
+
+    <p class="auth-footer">
+      Already have an account?
+      <a href="login.html" class="auth-link">Login</a>
     </p>
-
-    <div style="margin-top:40px;">
-
-      <input
-        type="text"
-        id="name"
-        placeholder="Full Name"
-      >
-
-      <input
-        type="email"
-        id="email"
-        placeholder="Email"
-      >
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Password"
-      >
-
-      <button class="btn-primary" onclick="signup()">
-        Sign Up
-      </button>
-
-      <p style="text-align:center;margin-top:20px;">
-        Already have an account?
-        <a href="login.html" style="color:#29F19C;">
-          Login
-        </a>
-      </p>
-
-    </div>
 
   </div>
 
 </div>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } 
-  from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword 
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  // 🔥 REPLACE WITH YOUR REAL FIREBASE CONFIG
+  import { 
+    getFirestore, 
+    doc, 
+    setDoc 
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  // 🔥 YOUR FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -74,19 +57,28 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  // SIGNUP FUNCTION
   window.signup = async function () {
+
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // 🔐 Create auth user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      const user = userCredential.user;
+
+      // 💾 Save extra user data in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+        createdAt: new Date()
+      });
 
       alert("Account created successfully!");
-
-      // optional: redirect to login
       window.location.href = "login.html";
 
     } catch (error) {
