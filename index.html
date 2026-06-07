@@ -16,12 +16,24 @@
     <!-- PROFILE -->
     <div class="profile">
         <h3 id="username">Student</h3>
-        <input id="nameInput" placeholder="Enter your name">
-        <button onclick="saveName()">Save</button>
+
+        <input
+            id="nameInput"
+            placeholder="Enter your name"
+        >
+
+        <button onclick="saveName()">
+            Save
+        </button>
+
+        <button onclick="logout()">
+            Logout
+        </button>
     </div>
 
     <!-- STATS -->
     <div class="stats">
+
         <div class="card">
             <h3>Level</h3>
             <p id="level">1</p>
@@ -36,17 +48,24 @@
             <h3>🔥 Streak</h3>
             <p id="streak">0</p>
         </div>
+
     </div>
 
     <!-- AI QUESTS -->
-    <h2 class="section-title">🧠 AI Quests</h2>
+    <h2 class="section-title">
+        🧠 AI Quests
+    </h2>
 
     <div id="questContainer"></div>
 
-    <button onclick="generateQuests()">🔄 Generate New Quests</button>
+    <button onclick="generateQuests()">
+        🔄 Generate New Quests
+    </button>
 
     <!-- BADGES -->
-    <h2 class="section-title">🏅 Achievements</h2>
+    <h2 class="section-title">
+        🏅 Achievements
+    </h2>
 
     <div class="badges">
         <p id="badge1">🔒 Beginner</p>
@@ -63,5 +82,6 @@
     </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>
