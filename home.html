@@ -3,41 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QUEST Dashboard</title>
+  <title>QUEST Map</title>
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .progress-bar{
-      width:100%;
-      height:12px;
-      background:#1E293B;
-      border-radius:20px;
-      overflow:hidden;
-      margin-top:10px;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:20px;
     }
 
-    .progress{
-      height:100%;
-      width:0%;
-      background:#29F19C;
-      transition:0.3s ease;
-    }
-
-    .level-badge{
-      display:inline-block;
-      padding:6px 12px;
-      background:#29F19C;
-      color:black;
-      border-radius:20px;
-      font-weight:700;
-      margin-top:10px;
-    }
-
-    .stat-box{
-      margin-top:15px;
-      padding:15px;
+    .quest-card{
       background:#0D1524;
+      padding:15px;
       border-radius:16px;
+      text-align:center;
+    }
+
+    .quest-title{
+      font-weight:700;
+      margin-bottom:10px;
     }
   </style>
 </head>
@@ -48,37 +34,35 @@
 
   <div class="auth-card" style="margin-top:60px">
 
-    <h1 class="auth-title">Dashboard</h1>
+    <h1 class="auth-title">Quest Map 🧭</h1>
 
     <p class="auth-subtitle" id="userInfo">Loading...</p>
 
-    <div class="level-badge" id="levelBadge">Level 1</div>
+    <p style="color:#29F19C;font-weight:700;" id="stats">
+      XP: 0 | Level: 1
+    </p>
 
-    <div class="stat-box">
+    <div class="grid">
 
-      <p style="font-weight:700;">XP Progress</p>
-
-      <div class="progress-bar">
-        <div class="progress" id="xpBar"></div>
+      <div class="quest-card">
+        <div class="quest-title">📚 Study</div>
+        <button class="btn-primary" onclick="doQuest('study')">+20 XP</button>
       </div>
 
-      <p style="margin-top:10px;" id="xpText">XP: 0 / 100</p>
+      <div class="quest-card">
+        <div class="quest-title">💪 Fitness</div>
+        <button class="btn-primary" onclick="doQuest('fitness')">+25 XP</button>
+      </div>
 
-    </div>
+      <div class="quest-card">
+        <div class="quest-title">🧠 Focus</div>
+        <button class="btn-primary" onclick="doQuest('focus')">+30 XP</button>
+      </div>
 
-    <div style="margin-top:25px;">
-
-      <button class="btn-primary" onclick="completeQuest(10)">
-        Easy Quest (+10 XP)
-      </button>
-
-      <button class="btn-primary" style="margin-top:10px;" onclick="completeQuest(25)">
-        Medium Quest (+25 XP)
-      </button>
-
-      <button class="btn-secondary" style="margin-top:10px;" onclick="completeQuest(50)">
-        Hard Quest (+50 XP)
-      </button>
+      <div class="quest-card">
+        <div class="quest-title">🎯 Challenge</div>
+        <button class="btn-primary" onclick="doQuest('challenge')">+50 XP</button>
+      </div>
 
     </div>
 
@@ -130,7 +114,16 @@
     updateUI();
   });
 
-  window.completeQuest = async function (xpGain) {
+  window.doQuest = async function (type) {
+
+    let rewards = {
+      study: 20,
+      fitness: 25,
+      focus: 30,
+      challenge: 50
+    };
+
+    let xpGain = rewards[type];
 
     let newXP = userData.xp + xpGain;
     let newLevel = userData.level;
@@ -154,18 +147,8 @@
   };
 
   function updateUI() {
-
-    let maxXP = userData.level * 100;
-    let percent = (userData.xp / maxXP) * 100;
-
-    document.getElementById("levelBadge").textContent =
-      "Level " + userData.level;
-
-    document.getElementById("xpText").textContent =
-      "XP: " + userData.xp + " / " + maxXP;
-
-    document.getElementById("xpBar").style.width =
-      percent + "%";
+    document.getElementById("stats").textContent =
+      "XP: " + userData.xp + " | Level: " + userData.level;
   }
 
   window.logout = async function () {
